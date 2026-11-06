@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TaskFlow secure todo management" />
+    <title>TaskFlow | Sign in</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-900">
+    <main class="flex min-h-screen items-center justify-center px-4 py-10 sm:px-6">
+      <section class="grid w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-[0.9fr_1.1fr]">
+        <div class="hidden bg-violet-700 p-10 text-white lg:flex lg:flex-col lg:justify-between">
+          <div>
+            <p class="text-xl font-bold tracking-tight">TaskFlow</p>
+            <h1 class="mt-24 max-w-sm text-4xl font-semibold leading-tight">Make space for what matters.</h1>
+            <p class="mt-5 max-w-sm text-violet-100">Organize your work, stay focused, and keep every task moving forward.</p>
+          </div>
+          <p class="text-sm text-violet-200">Simple task management for everyday momentum.</p>
+        </div>
+
+        <div class="p-6 sm:p-10 lg:p-14">
+          <div class="mb-8 lg:hidden">
+            <p class="text-xl font-bold text-violet-700">TaskFlow</p>
+          </div>
+
+          <div class="mb-8">
+            <p id="form-eyebrow" class="text-sm font-semibold uppercase tracking-wider text-violet-700">Welcome back</p>
+            <h2 id="form-title" class="mt-2 text-3xl font-semibold tracking-tight">Sign in to your account</h2>
+            <p id="form-description" class="mt-2 text-slate-600">Continue where you left off.</p>
+          </div>
+
+          <div id="form-message" class="mb-6 hidden rounded-xl border px-4 py-3 text-sm" role="alert" aria-live="polite"></div>
+
+          <form id="auth-form" novalidate>
+            <div id="name-field" class="mb-5 hidden">
+              <label for="name" class="mb-2 block text-sm font-medium text-slate-700">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" maxlength="100"
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-violet-600 focus:ring-4 focus:ring-violet-100"
+                placeholder="Your name" />
+              <p id="name-error" class="mt-1 hidden text-sm text-red-600"></p>
+            </div>
+
+            <div class="mb-5">
+              <label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" required
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition placeholder:text-slate-400 focus:border-violet-600 focus:ring-4 focus:ring-violet-100"
+                placeholder="you@example.com" />
+              <p id="email-error" class="mt-1 hidden text-sm text-red-600"></p>
+            </div>
+
+            <div class="mb-6">
+              <label for="password" class="mb-2 block text-sm font-medium text-slate-700">Password</label>
+              <div class="relative">
+                <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required
+                  class="w-full rounded-xl border border-slate-300 px-4 py-3 pr-20 outline-none transition placeholder:text-slate-400 focus:border-violet-600 focus:ring-4 focus:ring-violet-100"
+                  placeholder="At least 8 characters" />
+                <button id="password-toggle" type="button" class="absolute inset-y-0 right-3 my-auto h-9 rounded-lg px-2 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-violet-500" aria-controls="password" aria-pressed="false">Show</button>
+              </div>
+              <p id="password-error" class="mt-1 hidden text-sm text-red-600"></p>
+            </div>
+
+            <button id="submit-button" type="submit"
+              class="flex w-full items-center justify-center gap-2 rounded-xl bg-violet-700 px-4 py-3 font-semibold text-white transition hover:bg-violet-800 focus:outline-none focus:ring-4 focus:ring-violet-200 disabled:cursor-not-allowed disabled:opacity-70">
+              <span id="submit-label">Sign in</span>
+              <span id="submit-spinner" class="hidden h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <p class="mt-8 text-center text-sm text-slate-600">
+            <span id="switch-copy">Don't have an account?</span>
+            <button id="mode-toggle" type="button" class="font-semibold text-violet-700 hover:text-violet-900 focus:outline-none focus:underline">Create one</button>
+          </p>
+        </div>
+      </section>
+    </main>
+    <script src="/src/js/auth.js" defer></script>
+  </body>
+</html>

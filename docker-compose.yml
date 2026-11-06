@@ -1,0 +1,75 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "${APP_PORT:-8000}:${APP_PORT:-8000}"
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      APP_HOST: ${APP_HOST:-0.0.0.0}
+      APP_PORT: ${APP_PORT:-8000}
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongodb:27017}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-taskflow}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-replace-with-a-local-development-secret}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-30}
+      AUTH_COOKIE_NAME: ${AUTH_COOKIE_NAME:-taskflow_auth}
+      CSRF_COOKIE_NAME: ${CSRF_COOKIE_NAME:-taskflow_csrf}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000,http://localhost:8080}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - taskflow_internal
+      - taskflow_public
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--output-document=/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - taskflow_internal
+      - taskflow_public
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-taskflow}
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - taskflow_internal
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+
+networks:
+  taskflow_internal:
+    internal: true
+  taskflow_public:
+    driver: bridge
